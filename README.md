@@ -6,8 +6,10 @@ so just spam issues till i fix nything like that
 
 so to add a ship simple do this:
 ```
-ships['<ship-name>'] = [<amount-of spaces>, False]]
+ships['<ship-name>'] = [<spaces>, False]]
 ```
+spaces: int
+ship-name: string (ofc)
 always keep the second item in the array `False` otherwise it wont allow you to use the ship
 and make sure that you do this after `ships` is defined :-)
 
