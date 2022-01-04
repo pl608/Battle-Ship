@@ -9,4 +9,5 @@ so to add a ship simple do this:
 ships['<ship-name>'] = [<amount-of spaces>, False]]
 ```
 always keep the second item in the array `False` otherwise it wont allow you to use the ship
+and make sure that you do this after `ships` is defined :-)
 
