@@ -1,5 +1,8 @@
 # This is a Testing Branch!
-
+so far what i added:
+* a bit of networking
+* a tkinter gui
+* threading!
 ## Battle-Ship
 this SHOULD work in lenux(if i spelled it wrong spam issues till I fix it) the thing that maby wont work is where it clears the screen then re-prints the battleship board along with some other stuff (to look animated)
 #### Note:
