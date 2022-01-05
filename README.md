@@ -1,4 +1,6 @@
-# Battle-Ship
+# This is a Testing Branch!
+
+## Battle-Ship
 this SHOULD work in lenux(if i spelled it wrong spam issues till I fix it) the thing that maby wont work is where it clears the screen then re-prints the battleship board along with some other stuff (to look animated)
 #### Note:
 the clear wont work in python idle(and if i spelled that wrong spam) because it uses os to clear because I dont know of a better way (you are free to enlighten me in issues)
