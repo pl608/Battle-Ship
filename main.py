@@ -58,10 +58,10 @@ def Proccess(data):
                 print(1)
                 pass
             elif (name in ships) == False:
-                print("the name of ship you inputed doesnt exist\navailable ships are:")
+                print("The name of the ship you provided doesn't exist\nThe available ships are:")
                 for x in ships:
                     print(x)
-                name = input("please input one of the above(note: you can only use each once): ")
+                name = input("Please input one of the above, note: you can only use each one once: ")
                 check()
         
         
@@ -71,7 +71,7 @@ def Proccess(data):
         orient = sdata[3]
         return name, xcoord, ycoord, orient
     except Exception as e:
-        print("Your input did not work\nplease make sure you are using intergers for the coords")
+        print("Your input did not work.\nPlease make sure you are using integers for the coordinates")
         #print("\noh and here is the error: ")
         #print(e)
         return 0,0,0,0
@@ -79,15 +79,15 @@ def Proccess(data):
     
 def Setup():
     def check():
-        data = draw("ship name and placement(h for help)")
+        data = draw("ship name and placement (h for help)")
         if data == "h":
             print("""
 use:
 <ship-name>,<xcoord>,<ycoord>,(hor or vert for horizantal and vertical)
 ALSO:
-x will ext the game
+x will exit the game
 """)
-            data = draw("ship name and placement(h for help)")
+            data = draw("ship name and placement (h for help)")
         elif data == "x":
             import sys
             sys.exit("you told me to...")
@@ -97,7 +97,7 @@ x will ext the game
                 if xcoord == 0:
                     check()
             if ships[name][1] == True:
-                print("you already placed that ship!\nplease try again")
+                print("You already placed that ship!\nPlease try again.")
                 check()
             else:
                 i = 0
@@ -119,8 +119,8 @@ x will ext the game
                                 else:
                                     board[xcoord+i][ycoord] = 1
                         except:
-                            print("That wont work...\neither the ship,coords & orientation make it go out of bounds or overlap... please try again\nfor this just re-define the coords")
-                            d = input("coords please (ex. 2,5): ").split(',')
+                            print("That won't work.\nThe given coordinates and orientation would place the ship out of bounds or overlap with another ship. Please try again\nby redifining the coordinates")
+                            d = input("Coordinates please (e.g. 2,5): ").split(',')
             
                             xcoord = int(d[0])
                             ycoord = int(d[1])
@@ -133,26 +133,26 @@ x will ext the game
 
     for x in ships:
         check()
-    input("hit enter to start")
+    input("Hit enter to start.")
     
 def Guess():
-    data = draw("guess where a ship is (ex. <xcoord>,<ycoord>): ")
+    data = draw("Guess where a ship is (e.g. <x-coordinate>,<y-coordinate>): ")
     try:
         x = data.split(",")[0]
         y = data.split(",")[1]
     except:
-        print("well... you used this program wrong\nput numbers like 1,2,3,4,5,6\nrather then one,two,three,four,five,six")
-        print("you can try again though")
+        print("Well, you used this program incorrectly.\nInput numbers like 1, 2, 3, 4, 5, 6\nrather then one, two, three, four, five, six.")
+        print("You may try again, though.")
         Guess()
     if guessmap[x][y] == 1:
-        print("well... you already guessed that number try again")
+        print("Well, you already tried that number. Try another one.")
         
     else:
         guessmap[x][y] = 1
     
                         
 if __name__ == "__main__":
-    print("Quick Note:\n     you cant actually play battle ship right now cause I didnt add sockets yet.\nalso this thing doesnt really work too incredibly well.")
+    print("Quick Note:\n     you can't play battle ship right now, because I didn't add sockets yet.\nAlso this program doesn't work well.")
     Setup()
     Guess()
      
