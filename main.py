@@ -1,158 +1,115 @@
-import os, socket
-"""
-GOING TO ADD SOCKET LATER
+from tkinter import *
+from tkinter import messagebox
+from tkinter import filedialog
+import socket
+import threading
+from functools import partial
+from pickle import load
+ii = 0
+connected = False
+sendN = False
+isHit = False
+xy = [0,0]
+def tk():
+    global map
+    global ii
+    root = Tk()
+    root.title("Battle Ship")
+    w = 'a,b,c,d,e,f,g,h,i,j'.split(",")
+    h = [x+1 for x in range(len(w))]
+    b = []
 
-host = "192.0.194"
-ip = 8080
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((host,ip))
-"""
-
-board= [
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)]
+    map = [
+        [0 for x in h],
+        [1 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h],
+        [0 for x in h]
     ]
-guessmap = board
-ships = {"patrol":[3,False],
-         "carrier":[5,False],
-         "sub":[3, False],
-         "destroyer":[4, False],
-         "ship":[3, False]}
-alpha = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p".split(",")
-def draw(outtxt: str):
-    print(" |12345678910")
-    print("_"*13)
+    ii = 0
+    def press(x,y):
+        global ii
+        print(f"{x}|{y}")
+        if map[x][y] == 1:
+            print('hit')
+            label = Label(root, text=f'hits = {ii+1}')
+            ii+=1
+            map[x][y] = 2
+            if connected == True:
+                sendN = True
+                xy = [x,y]
+            label.grid(row=len(h)+1, column=5)
+            root.update()
+        elif map[x][y] == 2:
+            messagebox.askokcancel('Opps', 'You seem to have already guessed at that location\nplease try again')
     i = -1
-    for x in board:
+    for x in w:
         i += 1
-        print(f"{alpha[i]}|",end="")
-        for y in x:
-            print(f"{y}|",end="")
-        print("|",end="\n")
-    output = input(outtxt+ ": ")
+        for y in h:
+            b.append([Button(root, text=f'{x}|{y}', command=partial(press, i,y)), (i,y)])
+    for x in b:
+        x[0].grid(row=x[1][0], column=x[1][1])
+    label = Label(root, text='hits = 0')
+    label.grid(row=len(h)+1, column=5)
+    stuff = Label(root, text=' ')
+    stuff.grid(row=len(h)+2, column=5)
+    root.mainloop()
+def net():
+    host = '192.168.0.103'
+    ip = 5050
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        os.system("cls")
-    except:
-        os.system("clear")
-    return output
-name = ""
-def Proccess(data):
-    global name
-    try:
-        sdata = data.split(',')
-        name = sdata[0]
-        print(name)
-        def check():
-            global name
-            name = name
-            if (name in ships) == True:
-                print(1)
-                pass
-            elif (name in ships) == False:
-                print("The name of the ship you provided doesn't exist\nThe available ships are:")
-                for x in ships:
-                    print(x)
-                name = input("Please input one of the above, note: you can only use each one once: ")
-                check()
-        
-        
-        check()
-        xcoord = int(sdata[1])
-        ycoord = int(sdata[2])
-        orient = sdata[3]
-        return name, xcoord, ycoord, orient
+        s.bind((host,ip))
+        s.listen(1)
+        con, adr = s.accept()
+        d = con.recv(3)
+        connected = True
+        print(d)
+        def send():
+            global sendN
+            while True:
+                if sendN == True:
+                    con.send(bytes(f"{xy[0]}|{xy[1]}"),'utf-8')
+                    sendN = False
+        def recv():
+            while True:
+                con.recv(3)
+        sendt = threading.Thread(target=send)
+        recvt = threading.Thread(target=recv)
+        sendt.start()
+        recvt.start()
     except Exception as e:
-        print("Your input did not work.\nPlease make sure you are using integers for the coordinates")
-        #print("\noh and here is the error: ")
-        #print(e)
-        return 0,0,0,0
+        print(e)
+        files = [('Battle Ship Map File','*.bsm')]
+        filepath = filedialog.askopenfile(mode='rb',filetypes=files)
+        a = load(filepath)
+        s.connect((host,ip))
+        connected = True
+        def send():
+            global sendN
+            while True:
+                if sendN == True:
+                    s.send(bytes(f"{xy[0]}|{xy[1]}"),'utf-8')
+                    sendN = False
+        def recv():
+            while True:
+                s.recv(3)
+        sendt = threading.Thread(target=send)
+        recvt = threading.Thread(target=recv)
+        sendt.start()
+        recvt.start()
+                
         
-    
-def Setup():
-    def check():
-        data = draw("ship name and placement (h for help)")
-        if data == "h":
-            print("""
-use:
-<ship-name>,<xcoord>,<ycoord>,(hor or vert for horizantal and vertical)
-ALSO:
-x will exit the game
-""")
-            data = draw("ship name and placement (h for help)")
-        elif data == "x":
-            import sys
-            sys.exit("you told me to...")
-        else:
-            name, xcoord, ycoord, orient = Proccess(data)
-            if name == 0:
-                if xcoord == 0:
-                    check()
-            if ships[name][1] == True:
-                print("You already placed that ship!\nPlease try again.")
-                check()
-            else:
-                i = 0
-                print(f"{name}:{ships[name]}\n{ships[name][0]}\{ships[name][1]}")
-                ships[name][1] = True
-                for x in range(ships[name][0]):
-                    def place():
-                        try:
-                            if orient == "hor":
-                                if board[xcoord][ycoord+i] == 1:
-                                    
-                                    raise Exception('error', 'collision')
-                                else:
-                                    board[xcoord][ycoord+i] = 1
-                            elif orient == "vert":
-                                if board[xcoord][ycoord+i] == 1:
-                                    
-                                    raise Exception('error', 'collision')
-                                else:
-                                    board[xcoord+i][ycoord] = 1
-                        except:
-                            print("That won't work.\nThe given coordinates and orientation would place the ship out of bounds or overlap with another ship. Please try again\nby redifining the coordinates")
-                            d = input("Coordinates please (e.g. 2,5): ").split(',')
-            
-                            xcoord = int(d[0])
-                            ycoord = int(d[1])
-                            place()
-                    place()
-    
-                            
-                        
-                    i += 1
+    #while True:
 
-    for x in ships:
-        check()
-    input("Hit enter to start.")
-    
-def Guess():
-    data = draw("Guess where a ship is (e.g. <x-coordinate>,<y-coordinate>): ")
-    try:
-        x = data.split(",")[0]
-        y = data.split(",")[1]
-    except:
-        print("Well, you used this program incorrectly.\nInput numbers like 1, 2, 3, 4, 5, 6\nrather then one, two, three, four, five, six.")
-        print("You may try again, though.")
-        Guess()
-    if guessmap[x][y] == 1:
-        print("Well, you already tried that number. Try another one.")
         
-    else:
-        guessmap[x][y] = 1
-    
-                        
 if __name__ == "__main__":
-    print("Quick Note:\n     you can't play battle ship right now, because I didn't add sockets yet.\nAlso this program doesn't work well.")
-    Setup()
-    Guess()
-     
+    nett = threading.Thread(target=net)
+    tkt = threading.Thread(target=tk)
+    nett.start()
+    tkt.start()
