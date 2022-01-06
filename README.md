@@ -1,6 +1,6 @@
 # Battle-Ship
 
-* A fun console game in Python for bored people. Will not work in idle.(see [Note](#note)
+* A fun console game in Python for bored people. Will not work in idle.(see [Note](#note))
 * Singleplayer for the time being, until socket functionality is added.
 
 This SHOULD work in Linux, the thing that maybe won't work is where it clears the screen then re-prints the battleship board along with some other stuff (to look animated)
