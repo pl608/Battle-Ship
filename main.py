@@ -9,18 +9,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((host,ip))
 """
 
-board= [
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)],
-    [0 for x in range(10)]
-    ]
+board = [[[0 for x in range(10)]] * 10]
 guessmap = board
 ships = {"patrol":[3,False],
          "carrier":[5,False],
@@ -39,10 +28,8 @@ def draw(outtxt: str):
             print(f"{y}|",end="")
         print("|",end="\n")
     output = input(outtxt+ ": ")
-    try:
-        os.system("cls")
-    except:
-        os.system("clear")
+    try: os.system("cls")
+    except: os.system("clear")
     return output
 name = ""
 def Proccess(data):
@@ -54,29 +41,21 @@ def Proccess(data):
         def check():
             global name
             name = name
-            if (name in ships) == True:
-                print(1)
-                pass
+            if (name in ships) == True: print(1)
             elif (name in ships) == False:
-                print("The name of the ship you provided doesn't exist\nThe available ships are:")
+                print("The name of the ship you provided doesn't exist.\nThe available ships are:")
                 for x in ships:
                     print(x)
-                name = input("Please input one of the above, note: you can only use each one once: ")
+                name = input("Please input one of the above.\nYou can only use each one once: ")
                 check()
-        
-        
         check()
         xcoord = int(sdata[1])
         ycoord = int(sdata[2])
         orient = sdata[3]
         return name, xcoord, ycoord, orient
     except Exception as e:
-        print("Your input did not work.\nPlease make sure you are using integers for the coordinates")
-        #print("\noh and here is the error: ")
-        #print(e)
+        print("Your input did not work.\nPlease make sure you are using integers for the coordinates.")
         return 0,0,0,0
-        
-    
 def Setup():
     def check():
         data = draw("ship name and placement (h for help)")
@@ -90,12 +69,11 @@ x will exit the game
             data = draw("ship name and placement (h for help)")
         elif data == "x":
             import sys
-            sys.exit("you told me to...")
+            sys.exit("You told me to...")
         else:
             name, xcoord, ycoord, orient = Proccess(data)
             if name == 0:
-                if xcoord == 0:
-                    check()
+                if xcoord == 0: check()
             if ships[name][1] == True:
                 print("You already placed that ship!\nPlease try again.")
                 check()
@@ -107,11 +85,8 @@ x will exit the game
                     def place():
                         try:
                             if orient == "hor":
-                                if board[xcoord][ycoord+i] == 1:
-                                    
-                                    raise Exception('error', 'collision')
-                                else:
-                                    board[xcoord][ycoord+i] = 1
+                                if board[xcoord][ycoord+i] == 1: raise Exception('error', 'collision')
+                                else: board[xcoord][ycoord+i] = 1
                             elif orient == "vert":
                                 if board[xcoord][ycoord+i] == 1:
                                     
