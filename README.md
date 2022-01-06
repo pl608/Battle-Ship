@@ -19,6 +19,4 @@ spaces: int
 ship-name: string (ofc)
 always keep the second item in the array `False` otherwise it wont allow you to use the ship
 and make sure that you do this after `ships` is defined :)
-### Also I will soon add socket to make it a multiplayer game
 
-##### also if you want the latest and possibly greatest look in the testing branch
