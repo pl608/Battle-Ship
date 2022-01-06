@@ -4,9 +4,9 @@ so far what i added:
 * a tkinter gui
 * threading!
 ## Battle-Ship
-this SHOULD work in lenux(if i spelled it wrong spam issues till I fix it) the thing that maby wont work is where it clears the screen then re-prints the battleship board along with some other stuff (to look animated)
+this SHOULD work in lenux(if I spelled it wrong spam issues till I fix it) the thing that maby wont work is where it clears the screen then re-prints the battleship board along with some other stuff (to look animated)
 #### Note:
-the clear wont work in python idle(and if i spelled that wrong spam) because it uses os to clear because I dont know of a better way (you are free to enlighten me in issues)
+the clear wont work in python idle(and if I spelled that wrong spam) because it uses os to clear because I dont know of a better way (you are free to enlighten me in issues)
 ## There Are Probably Tons of bug and\or error 
 so just spam issues till I fix them like that
 ## If you want to add a ship to be used in the game you need to copy the format of the other ones
